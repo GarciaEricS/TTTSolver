@@ -3,9 +3,8 @@
 #include "solver.h"
 
 using namespace std;
-using namespace solver;
 
-vector<int>* generateMoves(int position) {
+vector<int>* solver::generateMoves(int position) {
 	vector<int>* moves = new vector<int>();
 	if (position <= 0) {
 	}
@@ -19,7 +18,7 @@ vector<int>* generateMoves(int position) {
 	return moves;
 }
 
-Primitive primtiveValue(int position) {
+solver::Primitive solver::primitiveValue(int position) {
 	if (position == 0) {
 		return Primitive::LOSE;
 	} else {
@@ -27,7 +26,7 @@ Primitive primtiveValue(int position) {
 	}
 }
 
-int doMove(int position, int move) {
+int solver::doMove(int position, int move) {
 	return position - move;
 }
 
