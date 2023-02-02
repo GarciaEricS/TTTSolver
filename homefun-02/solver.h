@@ -1,5 +1,6 @@
 #include <vector>
 #include <array>
+#include <unordered_map>
 
 namespace TTTsolver {
 	enum class Tile {X, O, B};
@@ -13,7 +14,7 @@ namespace TTTsolver {
 	Position *doMove(Position *position, int move);
 	std::vector<int>* generateMoves(Position *position);
 	Primitive primitiveValue(Position *position);
-	Result solve(Position *position);
+	Result solve(Position *position, std::unordered_map<int, Result> *memo);
 
 }
 
