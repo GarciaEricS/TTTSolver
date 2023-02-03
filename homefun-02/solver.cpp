@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int pos_to_int(TTTsolver::Position position) {
+int pos_to_int(TTTsolver::Position &position) {
 	int sum = 0;
 	array<TTTsolver::Tile, 9> tiles = position.tiles;
 	for (int i = 0; i < 9; i++) {
@@ -30,27 +30,47 @@ int pos_to_int(TTTsolver::Position position) {
 	return sum;
 }
 
-TTTsolver::Result TTTsolver::solve(TTTsolver::Position *position, unordered_map<int, TTTsolver::Result> *memo) {
+TTTsolver::Result TTTsolver::solve(TTTsolver::Position *position, 
+		unordered_map<int, TTTsolver::Result> *memo, 
+		unordered_map<int, TTTsolver::Result> *memo_prim) {
+
 	int num = pos_to_int(*position);
 	if (memo->find(num) != memo->end()) return memo->at(num);
 
 	TTTsolver::Primitive currResult = TTTsolver::primitiveValue(position);
-	if (currResult == TTTsolver::Primitive::WIN) return TTTsolver::Result::WIN;
-	if (currResult == TTTsolver::Primitive::LOSE) return TTTsolver::Result::LOSE;
-	if (currResult == Primitive::TIE) return Result::TIE;
+	TTTsolver::Result result;
+	bool prim = false;
+	switch (currResult) {
+		case (TTTsolver::Primitive::WIN):
+			result = TTTsolver::Result::WIN;
+			prim = true;
+			break;
+		case (TTTsolver::Primitive::LOSE):
+			result = TTTsolver::Result::LOSE;
+			prim = true;
+			break;
+		case (TTTsolver::Primitive::TIE):
+			result = TTTsolver::Result::TIE;
+			prim = true;
+			break;
+	}
+	if (prim) {
+		memo->insert({num, result});
+		memo_prim->insert({num, result});
+		return result;
+	}
 
 	vector<int> moves = *generateMoves(position);
-	TTTsolver::Result result;
 	bool win_found = false;
 	bool tie_found = false;
 	for (auto move : moves) {
 		TTTsolver::Position *new_position = doMove(position, move);
-		TTTsolver::Result result = solve(new_position, memo); delete new_position;
+		TTTsolver::Result result = solve(new_position, memo, memo_prim); 
+		delete new_position;
 		if (result == TTTsolver::Result::TIE) {
 			tie_found = true;
 		} else if (result == TTTsolver::Result::LOSE) {
 			win_found = true;
-			break;
 		}
 	}
 	if (win_found) {
@@ -58,28 +78,48 @@ TTTsolver::Result TTTsolver::solve(TTTsolver::Position *position, unordered_map<
 	} else if (tie_found) {
 		result = TTTsolver::Result::TIE;
 	} else {
-		result = Result::LOSE;
+		result = TTTsolver::Result::LOSE;
 	}
 	memo->insert({num, result});
 	return result;
 }
 
-
-
-/*
 int main() {
-	map<Result, char> conversion = {{Result::LOSE, 'L'},
-									{Result::WIN, 'W'},
-									{Result::TIE, 'T'},
-									{Result::DRAW, 'D'}};
+	TTTsolver::Position position;
+	position.tiles = {TTTsolver::Tile::B, TTTsolver::Tile::B, TTTsolver::Tile::B, 
+					  TTTsolver::Tile::B, TTTsolver::Tile::B, TTTsolver::Tile::B,
+					  TTTsolver::Tile::B, TTTsolver::Tile::B, TTTsolver::Tile::B};
+	position.whoseMove = TTTsolver::Tile::X;
+	unordered_map<int, TTTsolver::Result> memo;
+	unordered_map<int, TTTsolver::Result> memo_prim;
+	solve(&position, &memo, &memo_prim);
 
-	for (int i = 0; i <= 10; i++) {
-		cout << i;
-		cout << ':';
-		cout << ' ';
-		cout << conversion[solve(i)];
-		cout << '\n';
+	int lost = 0;
+	int tie = 0;
+	int win = 0;
+	for (auto pair : memo) {
+		if (pair.second == TTTsolver::Result::LOSE) {
+			lost += 1;		
+		} else if (pair.second == TTTsolver::Result::TIE) {
+			tie += 1;
+		} else {
+			win += 1;
+		}
 	}
+	int lost_prim = 0;
+	int tie_prim = 0;
+	int win_prim = 0;
+	for (auto pair : memo_prim) {
+		if (pair.second == TTTsolver::Result::LOSE) {
+			lost_prim += 1;		
+		} else if (pair.second == TTTsolver::Result::TIE) {
+			tie_prim += 1;
+		} else {
+			win_prim += 1;
+		}
+	}
+	cout << lost << " lost (" << lost_prim << " primitive)\n";
+	cout << tie << " tied (" << tie_prim << " primitive)\n";
+	cout << win << " won (" << win_prim << " primitive)\n";
 	return 0;
 }
-*/

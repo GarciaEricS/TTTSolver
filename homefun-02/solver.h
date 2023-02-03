@@ -14,7 +14,7 @@ namespace TTTsolver {
 	Position *doMove(Position *position, int move);
 	std::vector<int>* generateMoves(Position *position);
 	Primitive primitiveValue(Position *position);
-	Result solve(Position *position, std::unordered_map<int, Result> *memo);
+	Result solve(Position *position, std::unordered_map<int, Result> *memo, std::unordered_map<int, Result> *memo_prim);
 
 }
 

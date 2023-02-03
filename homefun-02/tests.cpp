@@ -1,6 +1,7 @@
 #include "solver.h"
 #include <assert.h>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
 using namespace TTTsolver;
@@ -36,31 +37,32 @@ int main() {
 	assert(primitiveValue(position_ptr) == Primitive::LOSE);	
 	
 	// Testing default gamestate is TIE
+	unordered_map<int, Result> memo;
     position.tiles =  {Tile::B, Tile::B, Tile::B, 
 					   Tile::B, Tile::B, Tile::B,
 					   Tile::B, Tile::B, Tile::B};
 	position.whoseMove = Tile::X;
-	assert (solve(&position) == Result::TIE);
+	assert (solve(&position, &memo) == Result::TIE);
 	
 	// Testing for a guaranteed win
 	position.tiles = {Tile::B, Tile::X, Tile::X, 
 					   Tile::X, Tile::O, Tile::O,
 					   Tile::X, Tile::O, Tile::O};
 	position.whoseMove = Tile::X;
-	assert(solve(&position) == Result::WIN);
+	assert(solve(&position, &memo) == Result::WIN);
 
     position.tiles = {Tile::X, Tile::X, Tile::B, 
 					   Tile::X, Tile::B, Tile::O,
 					   Tile::B, Tile::O, Tile::O};
 	position.whoseMove = Tile::X;
-	assert(solve(&position) == Result::WIN);
+	assert(solve(&position, &memo) == Result::WIN);
 	
 	// Testing for a guaranteed loss
 	position.tiles = {Tile::X, Tile::X, Tile::B, 
 					   Tile::X, Tile::O, Tile::B,
 					   Tile::B, Tile::B, Tile::O};
 	position.whoseMove = Tile::O;
-	assert(solve(&position) == Result::LOSE);
+	assert(solve(&position, &memo) == Result::LOSE);
 
 
 }

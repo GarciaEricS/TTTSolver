@@ -2,13 +2,14 @@
 #include <vector>
 #include <array>
 #include "solver.h"
+#include <unordered_map>
 
 using namespace std;
 
 vector<int>* TTTsolver::generateMoves(TTTsolver::Position *position) {
 	vector<int>* moves = new vector<int>();
-	TTTsolver::Tile whoseMove = position->whoseMove;
 	array<TTTsolver::Tile, 9> tiles = position->tiles;
+
 	for (int i = 0; i < 9; i++) {
 		if (tiles[i] == TTTsolver::Tile::B) {
 			moves->push_back(i);
@@ -16,7 +17,7 @@ vector<int>* TTTsolver::generateMoves(TTTsolver::Position *position) {
 	}
 	return moves;
 }
-bool line_at(array<TTTsolver::Tile, 9> tiles, int x, int y, int z) {
+bool line_at(array<TTTsolver::Tile, 9> &tiles, int x, int y, int z) {
 	return tiles[x] != TTTsolver::Tile::B && tiles[x] == tiles[y] && tiles[y] == tiles[z];
 }
 
@@ -53,11 +54,3 @@ TTTsolver::Position *TTTsolver::doMove(TTTsolver::Position *position, int move) 
 	return new_position;
 }
 
-void printVec(vector<int>* vectptr) {
-	vector<int> vect = *vectptr;
-	for (auto x : vect) {
-		cout << x;
-		cout << '\n';
-	}
-	cout << '\n';
-}
