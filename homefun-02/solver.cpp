@@ -121,5 +121,7 @@ int main() {
 	cout << lost << " lost (" << lost_prim << " primitive)\n";
 	cout << tie << " tied (" << tie_prim << " primitive)\n";
 	cout << win << " won (" << win_prim << " primitive)\n";
+	cout << lost + tie + win << " total (" << 
+		lost_prim + tie_prim + win_prim << " primitive)\n";
 	return 0;
 }

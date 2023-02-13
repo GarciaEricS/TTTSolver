@@ -1,0 +1,4 @@
+1574 lost (942 primitive)
+1068 tied (16 primitive)
+2836 won (0 primitive)
+5478 total (958 primitive)

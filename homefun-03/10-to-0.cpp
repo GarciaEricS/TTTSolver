@@ -26,7 +26,7 @@ namespace TTZ {
 		return Solver::Primitive::NOT_PRIMITIVE;
 	}
 
-	int TTZPosition::hash() {
+	int TTZPosition::hash(bool removeSymmetries) {
 		return currInt;
 	}
 }

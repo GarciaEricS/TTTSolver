@@ -11,7 +11,7 @@ namespace TTT {
 			Position *doMove(int move);
 			std::vector<int> *generateMoves();
 			Solver::Primitive primitiveValue();
-			int hash();
+			int hash(bool removeSymmetries);
 			std::array<Tile, 9> tiles;
 			Tile whoseMove;
 
@@ -21,12 +21,12 @@ namespace TTT {
 }
 
 namespace TTZ {
-class TTZPosition : public Solver::Position {
-	public:
-		Position *doMove(int move);
-		std::vector<int> *generateMoves();
-		Solver::Primitive primitiveValue();
-		int hash();
-		int currInt;
-};
+	class TTZPosition : public Solver::Position {
+		public:
+			Position *doMove(int move);
+			std::vector<int> *generateMoves();
+			Solver::Primitive primitiveValue();
+			int hash(bool removeSymmetries);
+			int currInt;
+	};
 }
