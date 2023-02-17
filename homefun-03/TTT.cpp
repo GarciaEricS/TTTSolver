@@ -16,19 +16,28 @@ namespace TTT {
 		};
 	}
 
+<<<<<<< HEAD
     Tile getAt(int i, int j) {
         return tiles[i * n + j];
     }
 
     void setAt(Tile tile, int i, int j) {
         tiles[i * n + j] = tile;
+=======
+    Tile TTTPosition::getAt(int i, int j) {
+        return tiles[i * j];
+    }
+
+    void TTTPosition::setAt(Tile tile, int i, int j) {
+        tiles[i * j] = tile;
+>>>>>>> 57aa4367cfd5c082a7c229e1eda79d838b5ed902
     }
 
 	std::vector<int> *TTTPosition::generateMoves() {
 		std::vector<int>* moves = new std::vector<int>();
 		auto tiles = this->tiles;
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < m * n; i++) {
 			if (tiles[i] == Tile::B) {
 				moves->push_back(i);
 			}
@@ -41,19 +50,71 @@ namespace TTT {
 	}
 
 	Solver::Primitive TTTPosition::primitiveValue() {
-		Tile whoseMove = this->whoseMove;
-		if (
-				line_at(0, 1, 2) ||
-				line_at(3, 4, 5) ||
-				line_at(6, 7, 8) ||
-				line_at(0, 3, 6) || 
-				line_at(1, 4, 7) || 
-				line_at(2, 5, 8) || 
-				line_at(0, 4, 8) || 
-				line_at(2, 4, 6)
-		) {
-			return Solver::Primitive::LOSE;
-		} for (int i = 0; i < 9; i++) {
+		auto piece = (whoseMove == Tile::X) ? Tile::O : Tile::X;
+		int inARow;
+		for (int i = 0; i < m; i++) {
+			inARow = 0;
+			for (int j = 0; j < n; j++) {
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}
+		}
+
+		for (int j = 0; j < n; j++) {
+			inARow = 0;
+			for (int i = 0; i < m; i++) {
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}
+		}
+
+		for (int s = 0; s < m; s++) {
+			inARow = 0;
+			int maxOffset = std::min(n, m - 1 - s);
+			for (int off = 0; off <= maxOffset; off++) {
+				int i = s + off;
+				int j = off;
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}	
+		}
+
+		for (int s = 0; s < m; s++) {
+			inARow = 0;
+			int maxOffset = std::min(n, m - 1 - s);
+			for (int off = 0; off <= maxOffset; off++) {
+				int i = s + off;
+				int j = n - 1 - off;
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}	
+		}
+
+		for (int i = 0; i < m * n; i++) {
 			if (tiles[i] == Tile::B) {
 				return Solver::Primitive::NOT_PRIMITIVE;
 			}
