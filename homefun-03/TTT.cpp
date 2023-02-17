@@ -41,18 +41,71 @@ namespace TTT {
 	}
 
 	Solver::Primitive TTTPosition::primitiveValue() {
-		if (
-				line_at(0, 1, 2) ||
-				line_at(3, 4, 5) ||
-				line_at(6, 7, 8) ||
-				line_at(0, 3, 6) || 
-				line_at(1, 4, 7) || 
-				line_at(2, 5, 8) || 
-				line_at(0, 4, 8) || 
-				line_at(2, 4, 6)
-		) {
-			return Solver::Primitive::LOSE;
-		} for (int i = 0; i < m * n; i++) {
+		auto piece = (whoseMove == Tile::X) ? Tile::O : Tile::X;
+		int inARow;
+		for (int i = 0; i < m; i++) {
+			inARow = 0;
+			for (int j = 0; j < n; j++) {
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}
+		}
+
+		for (int j = 0; j < n; j++) {
+			inARow = 0;
+			for (int i = 0; i < m; i++) {
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}
+		}
+
+		for (int s = 0; s < m; s++) {
+			inARow = 0;
+			int maxOffset = std::min(n, m - 1 - s);
+			for (int off = 0; off <= maxOffset; off++) {
+				int i = s + off;
+				int j = off;
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}	
+		}
+
+		for (int s = 0; s < m; s++) {
+			inARow = 0;
+			int maxOffset = std::min(n, m - 1 - s);
+			for (int off = 0; off <= maxOffset; off++) {
+				int i = s + off;
+				int j = n - 1 - off;
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}	
+		}
+
+		for (int i = 0; i < m * n; i++) {
 			if (tiles[i] == Tile::B) {
 				return Solver::Primitive::NOT_PRIMITIVE;
 			}
