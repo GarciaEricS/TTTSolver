@@ -20,19 +20,19 @@ namespace TTT {
 		std::vector<int>* moves = new std::vector<int>();
 		auto tiles = this->tiles;
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < m * n; i++) {
 			if (tiles[i] == Tile::B) {
 				moves->push_back(i);
 			}
 		}
 		return moves;
 	}
+
 	bool TTTPosition::line_at(int x, int y, int z) {
 		return tiles[x] != Tile::B && tiles[x] == tiles[y] && tiles[y] == tiles[z];
 	}
 
 	Solver::Primitive TTTPosition::primitiveValue() {
-		Tile whoseMove = this->whoseMove;
 		if (
 				line_at(0, 1, 2) ||
 				line_at(3, 4, 5) ||
@@ -44,7 +44,7 @@ namespace TTT {
 				line_at(2, 4, 6)
 		) {
 			return Solver::Primitive::LOSE;
-		} for (int i = 0; i < 9; i++) {
+		} for (int i = 0; i < m * n; i++) {
 			if (tiles[i] == Tile::B) {
 				return Solver::Primitive::NOT_PRIMITIVE;
 			}
