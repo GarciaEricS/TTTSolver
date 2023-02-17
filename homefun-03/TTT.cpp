@@ -69,7 +69,7 @@ namespace TTT {
 
 		for (int s = 0; s < m; s++) {
 			inARow = 0;
-			int maxOffset = std::min(n, m - 1 - s);
+			int maxOffset = std::min(n - 1, m - 1 - s);
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = s + off;
 				int j = off;
@@ -84,9 +84,26 @@ namespace TTT {
 			}	
 		}
 
+		for (int s = 0; s < n; s++) {
+			inARow = 0; 
+			int maxOffset = std::min(m - 1, n-1-s);
+			for (int off = 0; off <= maxOffset; off++) {
+				int i = off;
+				int j = s + off;
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}
+		}
+
 		for (int s = 0; s < m; s++) {
 			inARow = 0;
-			int maxOffset = std::min(n, m - 1 - s);
+			int maxOffset = std::min(n - 1, m - 1 - s);
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = s + off;
 				int j = n - 1 - off;
@@ -99,6 +116,23 @@ namespace TTT {
 					return Solver::Primitive::LOSE;
 				}
 			}	
+		}
+
+		for (int s = 0; s < n; s++) {
+			inARow = 0; 
+			int maxOffset = std::min(m - 1, n-1-s);
+			for (int off = 0; off <= maxOffset; off++) {
+				int i = m - 1 - off;
+				int j = s + off;
+				if (getAt(i, j) == piece) {
+					inARow += 1;
+				} else {
+					inARow = 0;
+				}
+				if (inARow == k) {
+					return Solver::Primitive::LOSE;
+				}
+			}
 		}
 
 		for (int i = 0; i < m * n; i++) {
@@ -121,7 +155,7 @@ namespace TTT {
 		return new_position;
 	}
 
-    int hash(std::vector<Tile> tiles, int m, int n) {
+    int hashPos(std::vector<Tile> tiles, int m, int n) {
         int sum = 0;
         for (int i = 0; i < m * n; i++) {
             switch (tiles[i]) {
@@ -140,16 +174,6 @@ namespace TTT {
         return sum;
     }
 
-    int TTTPosition::canonicalHash() {
-        int minHash = minReflectionHash(tiles, m, n);
-        if (m == n) {
-            std::vector<Tile> rotated = rotateBoard(tiles, m, n);
-            int minRotatedHash = minReflectionHash(rotated, m, n);
-            minHash = std::min(minHash, minRotatedHash);
-        }
-        return minHash;
-    }
-
     std::vector<Tile> rotateBoard(std::vector<Tile> tiles, int m, int n) {
         std::vector<Tile> rotated;
         for (int i = 0; i < m; i++) {
@@ -161,7 +185,7 @@ namespace TTT {
     }
 
     int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
-        int hashNoReflect = hash(tiles, m, n);
+        int hashNoReflect = hashPos(tiles, m, n);
 
         std::vector<Tile> reflected;
         for (int i = 0; i < m; i++) {
@@ -169,7 +193,7 @@ namespace TTT {
                 reflected.push_back(tiles[(m - 1 - i) * n + j]);
             }
         }
-        int hashVerticalReflect = hash(reflected, m, n);
+        int hashVerticalReflect = hashPos(reflected, m, n);
 
         reflected.clear();
         for (int i = 0; i < m; i++) {
@@ -177,7 +201,7 @@ namespace TTT {
                 reflected.push_back(tiles[i * n + n - 1 - j]);
             }
         }
-        int hashHorizontalReflect = hash(reflected, m, n);
+        int hashHorizontalReflect = hashPos(reflected, m, n);
 
         reflected.clear();
         for (int i = 0; i < m; i++) {
@@ -185,13 +209,27 @@ namespace TTT {
                 reflected.push_back(tiles[(m - 1 - i) * n + n - 1 - j]);
             }
         }
-        int hashBothReflect = hash(reflected, m, n);
+        int hashBothReflect = hashPos(reflected, m, n);
 
         return std::min(std::min(hashNoReflect, hashVerticalReflect), 
                         std::min(hashHorizontalReflect, hashBothReflect));
     }
 
+	int TTTPosition::canonicalHash() {
+        int minHash = minReflectionHash(tiles, m, n);
+        if (m == n) {
+            std::vector<Tile> rotated = rotateBoard(tiles, m, n);
+            int minRotatedHash = minReflectionHash(rotated, m, n);
+            minHash = std::min(minHash, minRotatedHash);
+        }
+        return minHash;
+    }
+
 	int TTTPosition::hash(bool removeSymmetries) {
-        return removeSymmetries : canonicalHash() ? hash(tiles, m, n);
+        return removeSymmetries ? canonicalHash() : hashPos(tiles, m, n);
 	}
+
+
+    
+
 };
