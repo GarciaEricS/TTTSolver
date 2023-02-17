@@ -16,6 +16,14 @@ namespace TTT {
 		};
 	}
 
+    Tile getAt(int i, int j) {
+        return tiles[i * j];
+    }
+
+    void setAt(Tile tile, int i, int j) {
+        tiles[i * j] = tile;
+    }
+
 	std::vector<int> *TTTPosition::generateMoves() {
 		std::vector<int>* moves = new std::vector<int>();
 		auto tiles = this->tiles;
@@ -51,6 +59,7 @@ namespace TTT {
 		}
 		return Solver::Primitive::TIE;
 	}
+
 	// Creates a new_position pointer which must later be freed
 	Solver::Position *TTTPosition::doMove(int move) {
 		auto tls = this->tiles;
