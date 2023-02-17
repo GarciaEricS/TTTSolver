@@ -17,11 +17,11 @@ namespace TTT {
 	}
 
     Tile getAt(int i, int j) {
-        return tiles[i * j];
+        return tiles[i * n + j];
     }
 
     void setAt(Tile tile, int i, int j) {
-        tiles[i * j] = tile;
+        tiles[i * n + j] = tile;
     }
 
 	std::vector<int> *TTTPosition::generateMoves() {
@@ -72,6 +72,51 @@ namespace TTT {
 			whose_move == Tile::X ? Tile::O : Tile::X;
 		return new_position;
 	}
+
+    int hash(std::vector<Tile> tiles, int m, int n) {
+        int sum = 0;
+        for (int i = 0; i < m * n; i++) {
+            switch (tiles[i]) {
+                case (Tile::X):
+                    sum += 0;
+                    break;
+                case (Tile::O):
+                    sum += 1;
+                    break;
+                case (Tile::B):
+                    sum += 2;
+                    break;
+            }
+            sum *= 3;
+        }
+        return sum;
+    }
+
+    int TTTPosition::canonicalHash() {
+        int minHash = minReflectionHash(tiles, m, n);
+        if (m == n) {
+            std::vector<Tile> rotated = rotateBoard(tiles, m, n);
+            int minRotatedHash = minReflectionHash(rotated, m, n);
+            minHash = std::min(minHash, minRotatedHash);
+        }
+        return minHash;
+    }
+
+    std::vector<Tile> rotateBoard(std::vector<Tile> tiles, int m, int n) {
+
+    }
+
+    int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
+        int hashNoReflect = hash(tiles, m, n);
+        std::vector<Tile> verticallyReflected;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                verticallyReflected.push_back(tiles[(m - 1 - i) * n + j]);
+            }
+        }
+        int hashVertReflect = hash(verticallyReflected, m, n);
+        
+    }
 
 	int TTTPosition::hash(bool removeSymmetries) {
 		int allSymmetries[8][9] = {
