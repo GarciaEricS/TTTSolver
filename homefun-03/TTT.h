@@ -13,6 +13,7 @@ namespace TTT {
 			std::vector<int> *generateMoves();
 			Solver::Primitive primitiveValue();
 			int hash(bool removeSymmetries);
+            int canonicalHash();
 			Tile whoseMove;
 
 		protected:
