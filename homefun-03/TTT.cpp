@@ -103,19 +103,44 @@ namespace TTT {
     }
 
     std::vector<Tile> rotateBoard(std::vector<Tile> tiles, int m, int n) {
-
+        std::vector<Tile> rotated;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                rotated.push_back(tiles[j * n + n - 1 - i]);
+            }
+        }
+        return rotated;
     }
 
     int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
         int hashNoReflect = hash(tiles, m, n);
-        std::vector<Tile> verticallyReflected;
+
+        std::vector<Tile> reflected;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                verticallyReflected.push_back(tiles[(m - 1 - i) * n + j]);
+                reflected.push_back(tiles[(m - 1 - i) * n + j]);
             }
         }
-        int hashVertReflect = hash(verticallyReflected, m, n);
-        
+        int hashVerticalReflect = hash(reflected, m, n);
+
+        reflected.clear();
+        for (int i = 0; i < m; i++) {
+            for (int  = 0; j < n; j++) {
+                reflected.push_back(tiles[i * n + n - 1 - j]);
+            }
+        }
+        int hashHorizontalReflect = hash(relfected, m, n);
+
+        reflected.clear();
+        for (int i = 0; i < m; i++) {
+            for (int  = 0; j < n; j++) {
+                reflected.push_back(tiles[(m - 1 - i) * n + n - 1 - j]);
+            }
+        }
+        int hashBothReflect = hash(reflected, m, n);
+
+        return std::min(min(hashNoReflect, hashVerticalReflect), 
+                        min(hashHorizontalReflect, hashBothReflect));
     }
 
 	int TTTPosition::hash(bool removeSymmetries) {
