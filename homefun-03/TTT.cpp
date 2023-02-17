@@ -192,43 +192,6 @@ namespace TTT {
     }
 
 	int TTTPosition::hash(bool removeSymmetries) {
-		int allSymmetries[8][9] = {
-			{0, 1, 2, 3, 4, 5, 6, 7, 8},
-			{6, 3, 0, 7, 4, 1, 8, 5, 2},
-			{8, 7, 6, 5, 4, 3, 2, 1, 0},
-			{2, 5, 8, 1, 4, 7, 0, 3, 6},
-			{2, 1, 0, 5, 4, 3, 8, 7, 6},
-			{8, 5, 2, 7, 4, 1, 6, 3, 0},
-			{6, 7, 8, 3, 4, 5, 0, 1, 2},
-			{0, 3, 6, 1, 4, 7, 2, 5, 8}
-		};
-		int sum;
-		int minHash = INT_MAX; 
-		auto tls = this->tiles;
-		int symmetriesToConsider = removeSymmetries ? 8 : 1;
-		for (int i = 0; i < symmetriesToConsider; i++) {
-			sum = 0;
-			for (int j : allSymmetries[i]) {
-				switch (tls[j]) {
-					case (Tile::X):
-						sum += 0;
-						break;
-					case (Tile::O):
-						sum += 1;
-						break;
-					case (Tile::B):
-						sum += 2;
-						break;
-				}
-				sum *= 3;
-			}
-			minHash = std::min(minHash, sum); 
-		}
-		if (this->whoseMove == Tile::X) {
-			minHash += 0;
-		} else {
-			minHash += 1;
-		}
-		return minHash;
+        return removeSymmetries : canonicalHash() ? hash(tiles, m, n);
 	}
 };
