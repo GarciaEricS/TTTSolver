@@ -16,21 +16,12 @@ namespace TTT {
 		};
 	}
 
-<<<<<<< HEAD
-    Tile getAt(int i, int j) {
+    Tile TTTPosition::getAt(int i, int j) {
         return tiles[i * n + j];
     }
 
-    void setAt(Tile tile, int i, int j) {
-        tiles[i * n + j] = tile;
-=======
-    Tile TTTPosition::getAt(int i, int j) {
-        return tiles[i * j];
-    }
-
     void TTTPosition::setAt(Tile tile, int i, int j) {
-        tiles[i * j] = tile;
->>>>>>> 57aa4367cfd5c082a7c229e1eda79d838b5ed902
+        tiles[i * n + j] = tile;
     }
 
 	std::vector<int> *TTTPosition::generateMoves() {
@@ -182,22 +173,22 @@ namespace TTT {
 
         reflected.clear();
         for (int i = 0; i < m; i++) {
-            for (int  = 0; j < n; j++) {
+            for (int j = 0; j < n; j++) {
                 reflected.push_back(tiles[i * n + n - 1 - j]);
             }
         }
-        int hashHorizontalReflect = hash(relfected, m, n);
+        int hashHorizontalReflect = hash(reflected, m, n);
 
         reflected.clear();
         for (int i = 0; i < m; i++) {
-            for (int  = 0; j < n; j++) {
+            for (int j = 0; j < n; j++) {
                 reflected.push_back(tiles[(m - 1 - i) * n + n - 1 - j]);
             }
         }
         int hashBothReflect = hash(reflected, m, n);
 
-        return std::min(min(hashNoReflect, hashVerticalReflect), 
-                        min(hashHorizontalReflect, hashBothReflect));
+        return std::min(std::min(hashNoReflect, hashVerticalReflect), 
+                        std::min(hashHorizontalReflect, hashBothReflect));
     }
 
 	int TTTPosition::hash(bool removeSymmetries) {
