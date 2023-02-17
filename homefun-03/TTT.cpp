@@ -16,11 +16,11 @@ namespace TTT {
 		};
 	}
 
-    Tile getAt(int i, int j) {
+    Tile TTTPosition::getAt(int i, int j) {
         return tiles[i * j];
     }
 
-    void setAt(Tile tile, int i, int j) {
+    void TTTPosition::setAt(Tile tile, int i, int j) {
         tiles[i * j] = tile;
     }
 
