@@ -36,10 +36,6 @@ namespace TTT {
 		return moves;
 	}
 
-	bool TTTPosition::line_at(int x, int y, int z) {
-		return tiles[x] != Tile::B && tiles[x] == tiles[y] && tiles[y] == tiles[z];
-	}
-
 	Solver::Primitive TTTPosition::primitiveValue() {
 		auto piece = (whoseMove == Tile::X) ? Tile::O : Tile::X;
 		int inARow;

@@ -143,8 +143,7 @@ int main(int argc, char *argv[]) {
 					  TTT::Tile::B, TTT::Tile::B, TTT::Tile::B};
 	position.whoseMove = TTT::Tile::X;
 	*/
-	TTZ::TTZPosition position;
-	position.currInt = 10;
+	TTT::TTTPosition position(3, 3, 3);
 	position_ptr = &position;
 	std::unordered_map<int, std::pair<Solver::Result, int>> memo;
 
