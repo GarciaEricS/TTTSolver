@@ -7,9 +7,18 @@
 #include <algorithm>
 
 namespace TTT {
+	TTTPosition::TTTPosition(int m, int n, int k) {
+		this->m = m;
+		this->n = n;
+		this->k = k;
+		for (int i = 0; i < m * n; i++) {
+			this->tiles.push_back(Tile::B);
+		};
+	}
+
 	std::vector<int> *TTTPosition::generateMoves() {
 		std::vector<int>* moves = new std::vector<int>();
-		std::array<Tile, 9> tiles = this->tiles;
+		auto tiles = this->tiles;
 
 		for (int i = 0; i < 9; i++) {
 			if (tiles[i] == Tile::B) {
@@ -47,7 +56,7 @@ namespace TTT {
 		auto tls = this->tiles;
 		Tile whose_move = this->whoseMove;
 		tls[move] = whose_move;
-		TTTPosition *new_position = new TTTPosition();
+		TTTPosition *new_position = new TTTPosition(m, n, k);
 		new_position->tiles = tls;
 		new_position->whoseMove = 
 			whose_move == Tile::X ? Tile::O : Tile::X;
