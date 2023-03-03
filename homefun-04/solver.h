@@ -8,7 +8,7 @@ namespace Solver {
 	enum class Tile {X, O, B};
 	class Position {
 		public:
-			virtual Position *doMove(int move) = 0;
+			virtual Position *doMove(std::pair<int, Tile> move) = 0;
 			virtual std::vector<std::pair<int, Tile>> *generateMoves() = 0;
 			virtual Primitive primitiveValue() = 0;
 			virtual int hash(bool removeSymmetries) = 0;

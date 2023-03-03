@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	Solver::Position *position_ptr;
-	TTT::TTTPosition position(m, n, k);
+	TTT::TTTPosition position(m, n, k, TTT::Type::Regular, false);
 	position_ptr = &position;
 	std::unordered_map<int, std::pair<Solver::Result, int>> memo;
 	 /*
