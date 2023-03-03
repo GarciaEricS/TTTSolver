@@ -89,8 +89,22 @@ std::pair<Solver::Result, int> solve(Solver::Position *position,
 	return {result, remoteness};
 }
 
-void print_memo(std::unordered_map<int, std::pair<Solver::Result, int>> *memo, int m, int n, int k, bool removeSymmetries) {
+void print_memo(std::unordered_map<int, std::pair<Solver::Result, int>> *memo, int m, int n, int k, bool removeSymmetries, int typeInt, bool misere) {
 	std::vector<Counts> remote_count;
+	std::string typeStr;
+	switch (typeInt) {
+		case (0):
+			typeStr = "Regular";
+			break;
+		case (1):
+			typeStr = "Only X";
+			break;
+		case (2):
+			typeStr = "Order and Chaos";
+			break;
+	}
+	std::string misereStr;
+	misereStr = misere ? " Misere" : "";
 	for (auto pair : *memo) {
 		auto result = pair.second.first;
 		auto remoteness = pair.second.second;	
@@ -109,7 +123,7 @@ void print_memo(std::unordered_map<int, std::pair<Solver::Result, int>> *memo, i
 			remote_count[remoteness].wins += 1;
 		}
 	}
-	std::cout << m << 'x' << n << " (" << k << "-in-a-row) " <<"TicTacToe Anaylsis: (Symmetries removal is " <<
+	std::cout << m << 'x' << n << " (" << k << "-in-a-row) " <<"TicTacToe (" << typeStr << misereStr << ") Anaylsis: (Symmetries removal is " <<
 		(removeSymmetries ? "On" : "Off") << ')' << '\n'; 
 	std::cout << "-------------------------------------------\n";
 	std::cout << "R:\tW\tL\tT\tTotal\n";
@@ -138,30 +152,42 @@ int main(int argc, char *argv[]) {
 	int m = 3;
 	int n = 3;
 	int k = 3;
-	if (argc > 3) {	
+	int typeInt;
+	TTT::Type type = TTT::Type::Regular;
+	bool misere = false;
+	if (argc > 3) {
 		m = atoi(argv[1]);
 		n = atoi(argv[2]);
 		k = atoi(argv[3]);
 	}
-	if (argc > 4) {	
-		if (argv[4][0] == 'f') {	
+	if (argc > 4) {
+		typeInt = atoi(argv[4]);
+		switch (typeInt) {
+			case (0):
+				type = TTT::Type::Regular;
+				break;
+			case (1):
+				type = TTT::Type::OnlyX;
+				break;
+			case (2):
+				type = TTT::Type::OnC;
+		}
+	}
+	if (argc > 5) {
+		if (argv[5][0] == 't') {
+			misere = true;
+		}
+	}
+	if (argc > 6) {	
+		if (argv[6][0] == 'f') {	
 		removeSymmetries = false;
 		}
 	}
 	Solver::Position *position_ptr;
-	TTT::TTTPosition position(m, n, k, TTT::Type::Regular, false);
+	TTT::TTTPosition position(m, n, k, type, misere);
 	position_ptr = &position;
 	std::unordered_map<int, std::pair<Solver::Result, int>> memo;
-	 /*
-	if (argc == 3) {
-		std::string game(argv[2]);
-		if (game == "TTZ") {
-			TTZ::TTZPosition TTZpos;
-			TTZpos.currInt = 10;
-			position_ptr = &TTZpos;
-		}
-	} */
 	solve(position_ptr, removeSymmetries, &memo);
-	print_memo(&memo, m, n, k, removeSymmetries);	
+	print_memo(&memo, m, n, k, removeSymmetries, typeInt, misere);	
 	return 0;
 }
