@@ -22,6 +22,8 @@ namespace TTT {
 			int m;
 			int n;
 			int k;
+			Type type;
+			bool misere;
 			std::vector<Tile> tiles;
             Tile getAt(int i, int j);
             void setAt(Tile tile, int i, int j);

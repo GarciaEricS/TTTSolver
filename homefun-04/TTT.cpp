@@ -7,7 +7,9 @@
 #include <algorithm>
 
 namespace TTT {
-	TTTPosition::TTTPosition(int m, int n, int k) {
+	TTTPosition::TTTPosition(int m, int n, int k, Type type, bool misere) {
+		this->type = type;	
+		this->misere = misere;
 		this->m = m;
 		this->n = n;
 		this->k = k;
