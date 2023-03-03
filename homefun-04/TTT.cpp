@@ -45,13 +45,13 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		return moves;
 	}
 
-    std::pair<int, int> updateInARow(int i, int j, int XinARow, int OinARow) {
+    std::pair<int, int> TTTPosition::updateInARow(int i, int j, int XinARow, int OinARow) {
         switch (getAt(i, j)) {
-            case (Solver::Primitive::X):
+            case (Solver::Tile::X):
                 XinARow++;
                 OinARow = 0;
                 break;
-            case (Solver::Primitive::O):
+            case (Solver::Tile::O):
                 XinARow = 0;
                 OinARow++;
                 break;
@@ -90,7 +90,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		}
 
 		for (int j = 0; j < n; j++) {
-			inARow = 0;
+			XinARow = OinARow = 0;
 			for (int i = 0; i < m; i++) {
                 auto inARows = updateInARow(i, j, XinARow, OinARow);
                 XinARow = inARows.first;
@@ -102,7 +102,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		}
 
 		for (int s = 0; s < m; s++) {
-			inARow = 0;
+			XinARow = OinARow = 0;
 			int maxOffset = std::min(n - 1, m - 1 - s);
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = s + off;
@@ -117,7 +117,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		}
 
 		for (int s = 0; s < n; s++) {
-			inARow = 0; 
+			XinARow = OinARow = 0;
 			int maxOffset = std::min(m - 1, n-1-s);
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = off;
@@ -132,7 +132,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		}
 
 		for (int s = 0; s < m; s++) {
-			inARow = 0;
+			XinARow = OinARow = 0;
 			int maxOffset = std::min(n - 1, m - 1 - s);
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = s + off;
@@ -147,7 +147,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		}
 
 		for (int s = 0; s < n; s++) {
-			inARow = 0; 
+			XinARow = OinARow = 0;
 			int maxOffset = std::min(m - 1, n-1-s);
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = m - 1 - off;

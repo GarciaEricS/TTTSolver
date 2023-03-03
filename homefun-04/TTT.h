@@ -17,6 +17,8 @@ namespace TTT {
 			Solver::Tile whoseMove;
 
 		protected:
+    		bool kInARow(int XinARow, int OinARow);
+    		std::pair<int, int> updateInARow(int i, int j, int XinARow, int OinARow);
 			bool line_at(int x, int y, int z);
 			int m;
 			int n;
