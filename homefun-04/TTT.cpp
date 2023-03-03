@@ -27,12 +27,19 @@ namespace TTT {
     }
 
 std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
-		std::vector<int>* moves = new std::vector<std::pair<int, Solver::Tile>>();
+		std::vector<std::pair<int, Solver::Tile>>* moves = new std::vector<std::pair<int, Solver::Tile>>();
 		auto tiles = this->tiles;
 
 		for (int i = 0; i < m * n; i++) {
 			if (tiles[i] == Solver::Tile::B) {
-				moves->push_back(i);
+				if (type == Type::Regular) {
+					moves->push_back({i, whoseMove});
+				} else if (type == Type::OnlyX) {
+					moves->push_back({i, Solver::Tile::X});
+				} else { // Order and Chaos
+					moves->push_back({i, Solver::Tile::X});
+					moves->push_back({i, Solver::Tile::O});
+				}
 			}
 		}
 		return moves;
