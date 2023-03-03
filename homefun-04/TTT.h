@@ -6,9 +6,10 @@
 
 namespace TTT {
 	enum class Tile {X, O, B};
+	enum class Type {Regular, OnlyX, OnC};
 	class TTTPosition : public Solver::Position {
 		public:
-			TTTPosition(int m, int n, int k);
+			TTTPosition(int m, int n, int k, Type type, bool misere);
 			Position *doMove(int move);
 			std::vector<int> *generateMoves();
 			Solver::Primitive primitiveValue();
