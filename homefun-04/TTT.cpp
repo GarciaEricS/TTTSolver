@@ -161,7 +161,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		TTTPosition *new_position = new TTTPosition(m, n, k, type, misere);
 		new_position->tiles = tls;
 		new_position->whoseMove = 
-			whose_move == Solver::Tile::X ? Solver::Tile::O : Solver::Tile::X;
+			whoseMove == Solver::Tile::X ? Solver::Tile::O : Solver::Tile::X;
 		return new_position;
 	}
 
@@ -238,8 +238,5 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 	int TTTPosition::hash(bool removeSymmetries) {
         return removeSymmetries ? canonicalHash() : hashPos(tiles, m, n);
 	}
-
-
-    
-
 };
+

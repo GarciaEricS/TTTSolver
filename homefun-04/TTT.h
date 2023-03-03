@@ -9,7 +9,7 @@ namespace TTT {
 	class TTTPosition : public Solver::Position {
 		public:
 			TTTPosition(int m, int n, int k, Type type, bool misere);
-			Position *doMove(int move);
+			Position *doMove(std::pair<int, Solver::Tile> move);
 			std::vector<std::pair<int, Solver::Tile>> *generateMoves();
 			Solver::Primitive primitiveValue();
 			int hash(bool removeSymmetries);
