@@ -74,7 +74,8 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
     }
 
 	Solver::Primitive TTTPosition::primitiveValue() {
-        auto winOrLose = misere ? Solver::Primitive::WIN : Solver::Primitive::LOSE;
+        bool winOrLoseCondition = (type == OnC) ? (whoseMove == Solver::Tile::X) ? misere;
+        auto winOrLose = winOrLoseCondition ? Solver::Primitive::WIN : Solver::Primitive::LOSE;
 		int XinARow;
         int OinARow;
 		for (int i = 0; i < m; i++) {
