@@ -146,11 +146,12 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 	}
 
 	// Creates a new_position pointer which must later be freed
-	Solver::Position *TTTPosition::doMove(int move) {
+	Solver::Position *TTTPosition::doMove(std::pair<int, Solver::Tile>  move) {
 		auto tls = this->tiles;
-		Solver::Tile whose_move = this->whoseMove;
-		tls[move] = whose_move;
-		TTTPosition *new_position = new TTTPosition(m, n, k);
+        int index = move.first;
+        Solver::Tile tile = move.second;
+		tls[index] = tile;
+		TTTPosition *new_position = new TTTPosition(m, n, k, type, misere);
 		new_position->tiles = tls;
 		new_position->whoseMove = 
 			whose_move == Solver::Tile::X ? Solver::Tile::O : Solver::Tile::X;
