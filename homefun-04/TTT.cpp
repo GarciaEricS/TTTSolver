@@ -45,34 +45,59 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		return moves;
 	}
 
+    std::pair<int, int> updateInARow(int i, int j) {
+        switch (getAt(i, j)) {
+            case (Solver::Primitive::X):
+                XinARow++;
+                OinARow = 0;
+                break;
+            case (Solver::Primitive::O):
+                XinARow = 0;
+                OinARow++;
+                break;
+            default:
+                XinARow = 0;
+                OinARow = 0;
+        }
+        return {XinARow, OinARow};
+    }
+
+    bool TTTPosition::kInARow(int XinARow, int OinARow) {
+        switch (type) {
+            case (Type::Regular):
+                return (whoseMove == Solver::Tile::X) ? (OinARow == k) : (XinARow == k);
+            case (Type::OnlyX):
+                return XinARow == k;
+            case (Type::OnC):
+                return (XinARow == k) || (OinARow == k);
+        }
+    }
+
 	Solver::Primitive TTTPosition::primitiveValue() {
-		auto piece = (whoseMove == Solver::Tile::X) ? Solver::Tile::O : Solver::Tile::X;
-		int inARow;
+        auto winOrLose = misere ? Solver::Primitive::WIN : Solver::Primitive::LOSE;
+		int XinARow;
+        int OinARow;
 		for (int i = 0; i < m; i++) {
-			inARow = 0;
+			XinARow = OinARow = 0;
 			for (int j = 0; j < n; j++) {
-				if (getAt(i, j) == piece) {
-					inARow += 1;
-				} else {
-					inARow = 0;
-				}
-				if (inARow == k) {
-					return Solver::Primitive::LOSE;
-				}
+                auto inARows = updateInARow(i, j);
+                XinARow = inARows.first;
+                OinARow = inARows.second;
+                if (kInARow(XinARow, OinARow)) {
+                    return winOrLose;
+                }
 			}
 		}
 
 		for (int j = 0; j < n; j++) {
 			inARow = 0;
 			for (int i = 0; i < m; i++) {
-				if (getAt(i, j) == piece) {
-					inARow += 1;
-				} else {
-					inARow = 0;
-				}
-				if (inARow == k) {
-					return Solver::Primitive::LOSE;
-				}
+                auto inARows = updateInARow(i, j);
+                XinARow = inARows.first;
+                OinARow = inARows.second;
+                if (kInARow(XinARow, OinARow)) {
+                    return winOrLose;
+                }
 			}
 		}
 
@@ -82,14 +107,12 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = s + off;
 				int j = off;
-				if (getAt(i, j) == piece) {
-					inARow += 1;
-				} else {
-					inARow = 0;
-				}
-				if (inARow == k) {
-					return Solver::Primitive::LOSE;
-				}
+                auto inARows = updateInARow(i, j);
+                XinARow = inARows.first;
+                OinARow = inARows.second;
+                if (kInARow(XinARow, OinARow)) {
+                    return winOrLose;
+                }
 			}	
 		}
 
@@ -99,14 +122,12 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = off;
 				int j = s + off;
-				if (getAt(i, j) == piece) {
-					inARow += 1;
-				} else {
-					inARow = 0;
-				}
-				if (inARow == k) {
-					return Solver::Primitive::LOSE;
-				}
+                auto inARows = updateInARow(i, j);
+                XinARow = inARows.first;
+                OinARow = inARows.second;
+                if (kInARow(XinARow, OinARow)) {
+                    return winOrLose;
+                }
 			}
 		}
 
@@ -116,14 +137,12 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = s + off;
 				int j = n - 1 - off;
-				if (getAt(i, j) == piece) {
-					inARow += 1;
-				} else {
-					inARow = 0;
-				}
-				if (inARow == k) {
-					return Solver::Primitive::LOSE;
-				}
+                auto inARows = updateInARow(i, j);
+                XinARow = inARows.first;
+                OinARow = inARows.second;
+                if (kInARow(XinARow, OinARow)) {
+                    return winOrLose;
+                }
 			}	
 		}
 
@@ -133,14 +152,12 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 			for (int off = 0; off <= maxOffset; off++) {
 				int i = m - 1 - off;
 				int j = s + off;
-				if (getAt(i, j) == piece) {
-					inARow += 1;
-				} else {
-					inARow = 0;
-				}
-				if (inARow == k) {
-					return Solver::Primitive::LOSE;
-				}
+                auto inARows = updateInARow(i, j);
+                XinARow = inARows.first;
+                OinARow = inARows.second;
+                if (kInARow(XinARow, OinARow)) {
+                    return winOrLose;
+                }
 			}
 		}
 
