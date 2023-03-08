@@ -1,4 +1,3 @@
-#include <array>
 #include <iostream>
 #include "TTT.h"
 #include <vector>
@@ -6,7 +5,6 @@
 #include <utility>
 #include <bits/stdc++.h>
 #include <algorithm>
-#include <tuple>
 #include <string>
 
 struct Counts {
@@ -184,9 +182,8 @@ int main(int argc, char *argv[]) {
 		removeSymmetries = false;
 		}
 	}
-	Solver::Position<TTT::TTTMove> *position_ptr;
 	TTT::TTTPosition position(m, n, k, type, misere);
-	position_ptr = &position;
+	TTT::TTTPosition *position_ptr = &position;
 	std::unordered_map<int, std::pair<Solver::Result, int>> memo;
 	solve(position_ptr, removeSymmetries, &memo);
 	print_memo(&memo, m, n, k, removeSymmetries, typeInt, misere);	
