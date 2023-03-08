@@ -17,19 +17,19 @@ namespace TTT {
 			Solver::Primitive primitiveValue();
 			int hash(bool removeSymmetries);
             int canonicalHash();
-			Tile whoseMove;
 
-		protected:
-    		bool kInARow(int XinARow, int OinARow);
-    		std::pair<int, int> updateInARow(int i, int j, int XinARow, int OinARow);
-			bool line_at(int x, int y, int z);
+		private:
+			Tile whoseMove;
 			int m;
 			int n;
 			int k;
 			Type type;
 			bool misere;
 			std::vector<Tile> tiles;
-            Tile getAt(int i, int j);
+
+    		bool kInARow(int XinARow, int OinARow);
+    		std::pair<int, int> updateInARow(int i, int j, int XinARow, int OinARow);
+			Tile getAt(int i, int j);
             void setAt(Tile tile, int i, int j);
 	};
 }
