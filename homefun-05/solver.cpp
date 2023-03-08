@@ -35,7 +35,8 @@ Solver::Result prim_to_result(Solver::Primitive prim) {
 	return result;
 }
 
-std::pair<Solver::Result, int> solve(Solver::Position *position, 
+template <class Move>
+std::pair<Solver::Result, int> solve(Solver::Position<Move> *position, 
 		bool removeSymmetries,
 		std::unordered_map<int, std::pair<Solver::Result, int>> *memo) {
 
@@ -183,7 +184,7 @@ int main(int argc, char *argv[]) {
 		removeSymmetries = false;
 		}
 	}
-	Solver::Position *position_ptr;
+	Solver::Position<TTT::TTTMove> *position_ptr;
 	TTT::TTTPosition position(m, n, k, type, misere);
 	position_ptr = &position;
 	std::unordered_map<int, std::pair<Solver::Result, int>> memo;

@@ -14,31 +14,31 @@ namespace TTT {
 		this->n = n;
 		this->k = k;
 		for (int i = 0; i < m * n; i++) {
-			this->tiles.push_back(Solver::Tile::B);
+			this->tiles.push_back(Tile::B);
 		};
 	}
 
-    Solver::Tile TTTPosition::getAt(int i, int j) {
+    Tile TTTPosition::getAt(int i, int j) {
         return tiles[i * n + j];
     }
 
-    void TTTPosition::setAt(Solver::Tile tile, int i, int j) {
+    void TTTPosition::setAt(Tile tile, int i, int j) {
         tiles[i * n + j] = tile;
     }
 
-std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
-		std::vector<std::pair<int, Solver::Tile>>* moves = new std::vector<std::pair<int, Solver::Tile>>();
+std::vector<std::pair<int, Tile>> *TTTPosition::generateMoves() {
+		std::vector<std::pair<int, Tile>>* moves = new std::vector<std::pair<int, Tile>>();
 		auto tiles = this->tiles;
 
 		for (int i = 0; i < m * n; i++) {
-			if (tiles[i] == Solver::Tile::B) {
+			if (tiles[i] == Tile::B) {
 				if (type == Type::Regular) {
 					moves->push_back({i, whoseMove});
 				} else if (type == Type::OnlyX) {
-					moves->push_back({i, Solver::Tile::X});
+					moves->push_back({i, Tile::X});
 				} else { // Order and Chaos
-					moves->push_back({i, Solver::Tile::X});
-					moves->push_back({i, Solver::Tile::O});
+					moves->push_back({i, Tile::X});
+					moves->push_back({i, Tile::O});
 				}
 			}
 		}
@@ -47,11 +47,11 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 
     std::pair<int, int> TTTPosition::updateInARow(int i, int j, int XinARow, int OinARow) {
         switch (getAt(i, j)) {
-            case (Solver::Tile::X):
+            case (Tile::X):
                 XinARow++;
                 OinARow = 0;
                 break;
-            case (Solver::Tile::O):
+            case (Tile::O):
                 XinARow = 0;
                 OinARow++;
                 break;
@@ -65,7 +65,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
     bool TTTPosition::kInARow(int XinARow, int OinARow) {
         switch (type) {
             case (Type::Regular):
-                return (whoseMove == Solver::Tile::X) ? (OinARow == k) : (XinARow == k);
+                return (whoseMove == Tile::X) ? (OinARow == k) : (XinARow == k);
             case (Type::OnlyX):
                 return XinARow == k;
             case (Type::OnC):
@@ -74,7 +74,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
     }
 
 	Solver::Primitive TTTPosition::primitiveValue() {
-        bool winOrLoseCondition = (type == Type::OnC) ? (whoseMove == Solver::Tile::X) : misere;
+        bool winOrLoseCondition = (type == Type::OnC) ? (whoseMove == Tile::X) : misere;
         auto winOrLose = winOrLoseCondition ? Solver::Primitive::WIN : Solver::Primitive::LOSE;
 		int XinARow;
         int OinARow;
@@ -163,7 +163,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 		}
 
 		for (int i = 0; i < m * n; i++) {
-			if (tiles[i] == Solver::Tile::B) {
+			if (tiles[i] == Tile::B) {
 				return Solver::Primitive::NOT_PRIMITIVE;
 			}
 		}
@@ -171,29 +171,29 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 	}
 
 	// Creates a new_position pointer which must later be freed
-	Solver::Position *TTTPosition::doMove(std::pair<int, Solver::Tile>  move) {
+	TTTPosition::Position *TTTPosition::doMove(std::pair<int, Tile>  move) {
 		auto tls = this->tiles;
         int index = move.first;
-        Solver::Tile tile = move.second;
+        Tile tile = move.second;
 		tls[index] = tile;
 		TTTPosition *new_position = new TTTPosition(m, n, k, type, misere);
 		new_position->tiles = tls;
 		new_position->whoseMove = 
-			whoseMove == Solver::Tile::X ? Solver::Tile::O : Solver::Tile::X;
+			whoseMove == Tile::X ? Tile::O : Tile::X;
 		return new_position;
 	}
 
-    int hashPos(std::vector<Solver::Tile> tiles, int m, int n) {
+    int hashPos(std::vector<Tile> tiles, int m, int n) {
         int sum = 0;
         for (int i = 0; i < m * n; i++) {
             switch (tiles[i]) {
-                case (Solver::Tile::X):
+                case (Tile::X):
                     sum += 0;
                     break;
-                case (Solver::Tile::O):
+                case (Tile::O):
                     sum += 1;
                     break;
-                case (Solver::Tile::B):
+                case (Tile::B):
                     sum += 2;
                     break;
             }
@@ -202,8 +202,8 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
         return sum;
     }
 
-    std::vector<Solver::Tile> rotateBoard(std::vector<Solver::Tile> tiles, int m, int n) {
-        std::vector<Solver::Tile> rotated;
+    std::vector<Tile> rotateBoard(std::vector<Tile> tiles, int m, int n) {
+        std::vector<Tile> rotated;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 rotated.push_back(tiles[j * n + n - 1 - i]);
@@ -212,10 +212,10 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
         return rotated;
     }
 
-    int minReflectionHash(std::vector<Solver::Tile> tiles, int m, int n) {
+    int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
         int hashNoReflect = hashPos(tiles, m, n);
 
-        std::vector<Solver::Tile> reflected;
+        std::vector<Tile> reflected;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 reflected.push_back(tiles[(m - 1 - i) * n + j]);
@@ -246,7 +246,7 @@ std::vector<std::pair<int, Solver::Tile>> *TTTPosition::generateMoves() {
 	int TTTPosition::canonicalHash() {
         int minHash = minReflectionHash(tiles, m, n);
         if (m == n) {
-            std::vector<Solver::Tile> rotated = rotateBoard(tiles, m, n);
+            std::vector<Tile> rotated = rotateBoard(tiles, m, n);
             int minRotatedHash = minReflectionHash(rotated, m, n);
             minHash = std::min(minHash, minRotatedHash);
         }

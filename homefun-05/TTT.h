@@ -6,15 +6,18 @@
 
 namespace TTT {
 	enum class Type {Regular, OnlyX, OnC};
-	class TTTPosition : public Solver::Position {
+	enum class Tile {X, O, B};
+	using TTTMove = std::pair<int, Tile>;
+
+	class TTTPosition : public Solver::Position<TTTMove> {
 		public:
 			TTTPosition(int m, int n, int k, Type type, bool misere);
-			Position *doMove(std::pair<int, Solver::Tile> move);
-			std::vector<std::pair<int, Solver::Tile>> *generateMoves();
+			Position *doMove(TTTMove move);
+			std::vector<TTTMove> *generateMoves();
 			Solver::Primitive primitiveValue();
 			int hash(bool removeSymmetries);
             int canonicalHash();
-			Solver::Tile whoseMove;
+			Tile whoseMove;
 
 		protected:
     		bool kInARow(int XinARow, int OinARow);
@@ -25,8 +28,8 @@ namespace TTT {
 			int k;
 			Type type;
 			bool misere;
-			std::vector<Solver::Tile> tiles;
-            Solver::Tile getAt(int i, int j);
-            void setAt(Solver::Tile tile, int i, int j);
+			std::vector<Tile> tiles;
+            Tile getAt(int i, int j);
+            void setAt(Tile tile, int i, int j);
 	};
 }
