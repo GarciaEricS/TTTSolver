@@ -1,5 +1,6 @@
 Session.vim
 src/main
+main
 *.swp
 *.swo
 src/obj/
