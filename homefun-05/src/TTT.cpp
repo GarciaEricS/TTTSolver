@@ -2,7 +2,7 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
-#include "TTT.h"
+#include "../include/TTT.h"
 #include <bits/stdc++.h>
 #include <algorithm>
 
@@ -71,6 +71,7 @@ bool TTTPosition::kInARow(int XinARow, int OinARow) {
 		case (Type::OnC):
 			return (XinARow == k) || (OinARow == k);
 	}
+	return false; // Never reached.
 }
 
 Solver::Primitive TTTPosition::primitiveValue() {
