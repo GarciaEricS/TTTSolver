@@ -1,4 +1,5 @@
 Session.vim
-main
+src/main
 *.swp
 *.swo
+src/obj/

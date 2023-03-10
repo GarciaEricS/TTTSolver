@@ -10,7 +10,8 @@ _OBJ = solver.o TTT.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
   
 $(ODIR)/%.o: %.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	@mkdir -p $(ODIR)
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 main: $(OBJ)
-	$(CC) -o ../$@ $^ $(CFLAGS)
+	@$(CC) -o ../$@ $^ $(CFLAGS)
