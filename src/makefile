@@ -6,7 +6,7 @@ _DEPS = solver.h TTT.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 ODIR = obj
-_OBJ = TTT.o main.o
+_OBJ = TTT.o main.o solver.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
   
 $(ODIR)/%.o: %.cpp $(DEPS)

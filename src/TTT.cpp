@@ -15,7 +15,7 @@ TTTPosition::TTTPosition(int m, int n, int k, Type type, bool misere) {
 	this->k = k;
 	for (int i = 0; i < m * n; i++) {
 		this->tiles.push_back(Tile::B);
-	};
+	}
 }
 
 Tile TTTPosition::getAt(int i, int j) {
@@ -26,19 +26,24 @@ void TTTPosition::setAt(Tile tile, int i, int j) {
 	tiles[i * n + j] = tile;
 }
 
-std::vector<std::pair<int, Tile>> *TTTPosition::generateMoves() {
-	std::vector<std::pair<int, Tile>>* moves = new std::vector<std::pair<int, Tile>>();
+std::vector<int> *TTTPosition::generateMoves() {
+	availableMoves.clear();
+	std::vector<int>* moves = new std::vector<int>();
 	auto tiles = this->tiles;
 
 	for (int i = 0; i < m * n; i++) {
 		if (tiles[i] == Tile::B) {
 			if (type == Type::Regular) {
-				moves->push_back({i, whoseMove});
+				moves->push_back(moves->size());
+				availableMoves.push_back({i, whoseMove});
 			} else if (type == Type::OnlyX) {
-				moves->push_back({i, Tile::X});
+				moves->push_back(moves->size());
+				availableMoves.push_back({i, Tile::X});
 			} else { // Order and Chaos
-				moves->push_back({i, Tile::X});
-				moves->push_back({i, Tile::O});
+				moves->push_back(moves->size());
+				moves->push_back(moves->size());
+				availableMoves.push_back({i, Tile::X});
+				availableMoves.push_back({i, Tile::O});
 			}
 		}
 	}
@@ -172,10 +177,11 @@ Solver::Primitive TTTPosition::primitiveValue() {
 }
 
 // Creates a new_position pointer which must later be freed
-TTTPosition::Position *TTTPosition::doMove(std::pair<int, Tile>  move) {
+TTTPosition::Position *TTTPosition::doMove(int move) {
 	auto tls = this->tiles;
-	int index = move.first;
-	Tile tile = move.second;
+	auto movePair = availableMoves.at(move);
+	int index = movePair.first;
+	Tile tile = movePair.second;
 	tls[index] = tile;
 	TTTPosition *new_position = new TTTPosition(m, n, k, type, misere);
 	new_position->tiles = tls;

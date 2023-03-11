@@ -9,11 +9,11 @@ namespace TTT {
 	enum class Tile {X, O, B};
 	using TTTMove = std::pair<int, Tile>;
 
-	class TTTPosition : public Solver::Position<TTTMove> {
+	class TTTPosition : public Solver::Position {
 		public:
 			TTTPosition(int m, int n, int k, Type type, bool misere);
-			Position *doMove(TTTMove move);
-			std::vector<TTTMove> *generateMoves();
+			Position *doMove(int move);
+			std::vector<int> *generateMoves();
 			Solver::Primitive primitiveValue();
 			int hash(bool removeSymmetries);
             int canonicalHash();
@@ -26,6 +26,7 @@ namespace TTT {
 			Type type;
 			bool misere;
 			std::vector<Tile> tiles;
+			std::vector<TTTMove> availableMoves;
 
     		bool kInARow(int XinARow, int OinARow);
     		std::pair<int, int> updateInARow(int i, int j, int XinARow, int OinARow);
