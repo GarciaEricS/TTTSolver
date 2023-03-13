@@ -380,8 +380,11 @@ int TTTPosition::getPlayerMove(std::vector<int> *moves) {
 	int inMove;
 	std::string inString;
 	int retMove;
-	std::cout << "Undo (u) Or Predict (p) OR\n";
+	std::cout << "Undo (u) Or Predict (p) OR";
 	for (int i = 0; i < moves->size(); i++) {
+		if (i % 5 == 0) {
+			std::cout << '\n';
+		}
 		auto move = moves->at(i);
 		std::cout << i + 1 << ": " << moveToStr(move) << '\t'; 	
 	}
