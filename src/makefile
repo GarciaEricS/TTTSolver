@@ -2,11 +2,11 @@ IDIR =../include
 CC=g++
 CFLAGS=-I$(IDIR)
 
-_DEPS = solver.h TTT.h
+_DEPS = solver.h TTT.h CLIPosition.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 ODIR = obj
-_OBJ = TTT.o main.o solver.o
+_OBJ = TTT.o CLI.o solver.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
   
 $(ODIR)/%.o: %.cpp $(DEPS)

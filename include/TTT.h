@@ -3,20 +3,29 @@
 #include <utility>
 #include <array>
 #include "solver.h"
+#include "CLIPosition.h"
 
 namespace TTT {
 	enum class Type {Regular, OnlyX, OnC};
 	enum class Tile {X, O, B};
 	using TTTMove = std::pair<int, Tile>;
 
-	class TTTPosition : public Solver::Position {
+	class TTTPosition : public CLI::CLIPosition {
 		public:
 			TTTPosition(int m, int n, int k, Type type, bool misere);
-			Position *doMove(int move);
+			TTTPosition *doMove(int move);
 			std::vector<int> *generateMoves();
 			Solver::Primitive primitiveValue();
 			int hash(bool removeSymmetries);
             int canonicalHash();
+
+			std::string getName(bool typeSpecified);
+			std::string getBoard();
+			std::string moveToStr(int move);
+			TTTPosition *getAndSetVariant();
+			int getAIMove(std::vector<int> *moves, std::unordered_map<int, std::pair<Solver::Result, int>> *solveMap);
+			int getPlayerMove(std::vector<int> *moves);
+
 
 		private:
 			Tile whoseMove;
