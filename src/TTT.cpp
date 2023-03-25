@@ -175,6 +175,14 @@ Solver::Primitive TTTPosition::primitiveValue() {
 			return Solver::Primitive::NOT_PRIMITIVE;
 		}
 	}
+	if (type == Type::OnC) {
+		if (whoseMove == Tile::X) {
+			return Solver::Primitive::LOSE;
+		}
+		else {
+			return Solver::Primitive::WIN;
+		}
+	}
 	return Solver::Primitive::TIE;
 }
 
