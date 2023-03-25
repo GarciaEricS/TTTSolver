@@ -5,7 +5,7 @@
 
 std::string solveAndGetResultStr(CLI::CLIPosition *position, std::unordered_map<long, std::pair<Solver::Result, int>> *solveMap) {
 	std::string resultStr;
-	auto resultAndRemote = Solver::solve(position, true, solveMap); 
+	auto resultAndRemote = Solver::solve(position, false, solveMap); 
 	auto result = resultAndRemote.first;
 	auto remoteness = resultAndRemote.second;
 	switch (result) {
