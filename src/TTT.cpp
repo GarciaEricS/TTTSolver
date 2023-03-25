@@ -271,7 +271,24 @@ long TTTPosition::hash(bool removeSymmetries) {
 
 // CLI Methods
 std::string TTTPosition::getName(bool typeSpecified) {
-	return "Tic-Tac-Toe";
+	std::string misereStr;
+	misereStr = misere ? " Misere" : "";
+	std::string typeStr;
+	switch (type) {
+		case (Type::Regular):
+			typeStr = "Regular";
+			break;
+		case (Type::OnlyX):
+			typeStr = "Only X";
+			break;
+		case (Type::OnC):
+			typeStr = "Order and Chaos";
+			break;
+	}
+	std::string boardInfo;
+	boardInfo += std::to_string(m) + 'x' + std::to_string(n);
+	boardInfo.append(" (" + std::to_string(k) + " in-a-row) ");
+	return boardInfo + "Tic-Tac-Toe (" + typeStr + misereStr + ")";
 }
 
 std::string TTTPosition::getBoard() {

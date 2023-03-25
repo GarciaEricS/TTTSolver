@@ -15,6 +15,7 @@ namespace Solver {
 			virtual std::vector<int> *generateMoves() = 0;
 			virtual Primitive primitiveValue() = 0;
 			virtual long hash(bool removeSymmetries) = 0;
+			virtual std::string getName(bool typeSpecified) = 0;
 			virtual ~Position() {};
 	};
 

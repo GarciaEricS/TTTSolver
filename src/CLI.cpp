@@ -135,14 +135,95 @@ void play(CLI::CLIPosition *position) {
 	delete solverMap;
 }
 
+void print_memo(
+		std::unordered_map<long, std::pair<Solver::Result, int>> *memo, 
+		Solver::Position &position,
+		bool removeSymmetries) {
+	struct Counts {
+		int wins;
+		int loses;
+		int draws;
+		int ties;
+	};
+	std::vector<Counts> remote_count;
+	for (auto pair : *memo) {
+		auto result = pair.second.first;
+		auto remoteness = pair.second.second;	
+		int prev_size = remote_count.size();
+		if (remoteness >= prev_size) {
+			remote_count.resize(remoteness + 1);
+		}
+		for (int i = prev_size; i <= remoteness; i++) {
+			remote_count[i] = {0, 0, 0, 0};
+		}	
+		if (result == Solver::Result::LOSE) {
+			remote_count[remoteness].loses += 1;		
+		} else if (result == Solver::Result::TIE) {
+			remote_count[remoteness].ties += 1;;
+		} else {
+			remote_count[remoteness].wins += 1;
+		}
+	}
+	std::string removeSymmetriesStr;
+	removeSymmetriesStr = (removeSymmetries ? "(Symmetries Removed)" : "");
+	std::cout << position.getName(true) << ' ' << removeSymmetriesStr << std::endl;	
+	std::cout << "-------------------------------------------\n";
+	std::cout << "R:\tW\tL\tT\tTotal\n";
+	int overall_wins = 0;
+	int overall_ties = 0;
+	int overall_loses = 0;
+	for (int i = remote_count.size() - 1; i >= 0; i--) {
+		int total = remote_count[i].wins + remote_count[i].ties + remote_count[i].loses;
+		auto counts = remote_count[i];
+		overall_wins += counts.wins;
+		overall_loses += counts.loses;
+		overall_ties += counts.ties;
+		std::cout << i << ":\t" << counts.wins << '\t' <<
+		counts.loses << '\t' << counts.ties << '\t' << 
+		total << '\n';
+	}
+	std::cout << "-------------------------------------------\n";
+	std::cout << "Total Wins: " << overall_wins << '\n' <<
+		"Total Loses: " << overall_loses << '\n' <<
+		"Total Ties: " << overall_ties << '\n' <<
+		"Total Positions: " << overall_wins + overall_loses + overall_ties << '\n';
+}
+
+
+void solveAndPrint(Solver::Position &position) {
+	bool removeSymmetries;
+	char removeSymmmetrisChar;
+	std::cout << "Remove Symmetries? (t or f)" << std::endl;
+	std::cin >> removeSymmmetrisChar;
+	removeSymmetries = (removeSymmmetrisChar == 't');
+	std::unordered_map<long, std::pair<Solver::Result, int>> memo;
+	Solver::solve(&position, removeSymmetries, &memo);
+	print_memo(&memo, position, removeSymmetries);	
+}
+
+
 int main() {
 	std::cout << "Welcome to The Homefun CLI!\n";
-	std::cout << "Press s to change variant settings. Press p to play with default settings.\n";
 	TTT::TTTPosition *pos = new TTT::TTTPosition(3, 3, 3, TTT::Type::Regular, false);
-	char option;
-	std::cin >> option;
-	if (option == 's') {
-		pos = pos->getAndSetVariant();
+	bool played = false;
+	while (!played) {
+		std::cout << "Press s to change variant settings. "
+			<< "Press p to play. "
+			<< "Press a to analyze." << std::endl;
+		char option;
+		std::cin >> option;
+		switch (option) {
+			case ('s'):
+				pos = pos->getAndSetVariant();
+				break;
+			case ('p'):
+				play(pos);
+				played = true;
+				break;
+			case ('a'): 
+				solveAndPrint(*pos);
+				played = true;
+				break;	
+		}
 	}
-	play(pos);
 }
