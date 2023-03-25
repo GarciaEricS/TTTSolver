@@ -192,8 +192,8 @@ TTTPosition *TTTPosition::doMove(int move) {
 	return new_position;
 }
 
-int hashPos(std::vector<Tile> tiles, int m, int n) {
-	int sum = 0;
+long hashPos(std::vector<Tile> tiles, int m, int n, TTT::Tile whoseMove) {
+	long sum = 0;
 	for (int i = 0; i < m * n; i++) {
 		switch (tiles[i]) {
 			case (Tile::X):
@@ -208,6 +208,9 @@ int hashPos(std::vector<Tile> tiles, int m, int n) {
 		}
 		sum *= 3;
 	}
+	if (whoseMove == TTT::Tile::X) {
+		sum += 1;
+	}
 	return sum;
 }
 
@@ -221,8 +224,8 @@ std::vector<Tile> rotateBoard(std::vector<Tile> tiles, int m, int n) {
 	return rotated;
 }
 
-int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
-	int hashNoReflect = hashPos(tiles, m, n);
+long minReflectionHash(std::vector<Tile> tiles, int m, int n, TTT::Tile whoseMove) {
+	long hashNoReflect = hashPos(tiles, m, n, whoseMove);
 
 	std::vector<Tile> reflected;
 	for (int i = 0; i < m; i++) {
@@ -230,7 +233,7 @@ int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
 			reflected.push_back(tiles[(m - 1 - i) * n + j]);
 		}
 	}
-	int hashVerticalReflect = hashPos(reflected, m, n);
+	long hashVerticalReflect = hashPos(reflected, m, n, whoseMove);
 
 	reflected.clear();
 	for (int i = 0; i < m; i++) {
@@ -238,7 +241,7 @@ int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
 			reflected.push_back(tiles[i * n + n - 1 - j]);
 		}
 	}
-	int hashHorizontalReflect = hashPos(reflected, m, n);
+	long hashHorizontalReflect = hashPos(reflected, m, n, whoseMove);
 
 	reflected.clear();
 	for (int i = 0; i < m; i++) {
@@ -246,24 +249,24 @@ int minReflectionHash(std::vector<Tile> tiles, int m, int n) {
 			reflected.push_back(tiles[(m - 1 - i) * n + n - 1 - j]);
 		}
 	}
-	int hashBothReflect = hashPos(reflected, m, n);
+	long hashBothReflect = hashPos(reflected, m, n, whoseMove);
 
 	return std::min(std::min(hashNoReflect, hashVerticalReflect), 
 					std::min(hashHorizontalReflect, hashBothReflect));
 }
 
 int TTTPosition::canonicalHash() {
-	int minHash = minReflectionHash(tiles, m, n);
+	long minHash = minReflectionHash(tiles, m, n, whoseMove);
 	if (m == n) {
 		std::vector<Tile> rotated = rotateBoard(tiles, m, n);
-		int minRotatedHash = minReflectionHash(rotated, m, n);
+		long minRotatedHash = minReflectionHash(rotated, m, n, whoseMove);
 		minHash = std::min(minHash, minRotatedHash);
 	}
 	return minHash;
 }
 
-int TTTPosition::hash(bool removeSymmetries) {
-	return removeSymmetries ? canonicalHash() : hashPos(tiles, m, n);
+long TTTPosition::hash(bool removeSymmetries) {
+	return removeSymmetries ? canonicalHash() : hashPos(tiles, m, n, whoseMove);
 }
 
 // CLI Methods
@@ -330,7 +333,7 @@ std::string TTTPosition::moveToStr(int move) {
 	std::string retStr;
 	auto movePair = availableMoves.at(move);
 	int row = movePair.first / n + 1;
-	int col = movePair.first % m + 1;
+	int col = movePair.first % n + 1;
 	retStr = "(";
 	retStr.append(std::to_string(row));
 	retStr.append(", ");
@@ -347,7 +350,7 @@ std::string TTTPosition::moveToStr(int move) {
 	return retStr;
 }
 
-int TTTPosition::getAIMove(std::vector<int> *moves, std::unordered_map<int, std::pair<Solver::Result, int>> *solveMap) {
+int TTTPosition::getAIMove(std::vector<int> *moves, std::unordered_map<long, std::pair<Solver::Result, int>> *solveMap) {
 	auto resultAndRemote = Solver::solve(this, true, solveMap);
 	Solver::Result resultNeeded;
 	int remoteNeeded;

@@ -1,6 +1,6 @@
 IDIR =../include
 CC=g++
-CFLAGS=-I$(IDIR)
+CFLAGS=-I$(IDIR) -Ofast
 
 _DEPS = solver.h TTT.h CLIPosition.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))

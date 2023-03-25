@@ -3,7 +3,7 @@
 #include <stack>
 #include <unordered_map>
 
-std::string solveAndGetResultStr(CLI::CLIPosition *position, std::unordered_map<int, std::pair<Solver::Result, int>> *solveMap) {
+std::string solveAndGetResultStr(CLI::CLIPosition *position, std::unordered_map<long, std::pair<Solver::Result, int>> *solveMap) {
 	std::string resultStr;
 	auto resultAndRemote = Solver::solve(position, true, solveMap); 
 	auto result = resultAndRemote.first;
@@ -70,7 +70,7 @@ std::pair<bool, bool> getHumanPlayers() {
 	return {playerOneHuman, playerTwoHuman};
 }
 
-void play(CLI::CLIPosition *position, bool playerOneTurn, bool playerOneHuman, bool playerTwoHuman, std::stack<CLI::CLIPosition*> *prevPositions, std::unordered_map<int, std::pair<Solver::Result, int>> *solverMap) {
+void play(CLI::CLIPosition *position, bool playerOneTurn, bool playerOneHuman, bool playerTwoHuman, std::stack<CLI::CLIPosition*> *prevPositions, std::unordered_map<long, std::pair<Solver::Result, int>> *solverMap) {
 	std::cout << "----------------------" << '\n';
 	Solver::Primitive primVal;
 	while ((primVal = position->primitiveValue()) == Solver::Primitive::NOT_PRIMITIVE) {
@@ -126,7 +126,7 @@ void play(CLI::CLIPosition *position, bool playerOneTurn, bool playerOneHuman, b
 
 void play(CLI::CLIPosition *position) {
 	std::stack<CLI::CLIPosition*> *prevPos = new std::stack<CLI::CLIPosition*>();
-	std::unordered_map<int, std::pair<Solver::Result, int>> *solverMap = new std::unordered_map<int, std::pair<Solver::Result, int>>();
+	std::unordered_map<long, std::pair<Solver::Result, int>> *solverMap = new std::unordered_map<long, std::pair<Solver::Result, int>>();
 	auto playerHumanPair = getHumanPlayers(); 
 	auto playerOneHuman = playerHumanPair.first;
 	auto playerTwoHuman = playerHumanPair.second;

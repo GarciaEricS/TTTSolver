@@ -14,13 +14,13 @@ namespace Solver {
 			virtual Position *doMove(int move) = 0;
 			virtual std::vector<int> *generateMoves() = 0;
 			virtual Primitive primitiveValue() = 0;
-			virtual int hash(bool removeSymmetries) = 0;
+			virtual long hash(bool removeSymmetries) = 0;
 			virtual ~Position() {};
 	};
 
 	
 	std::pair<Solver::Result, int> solve(Solver::Position *position, 
 			bool removeSymmetries,
-			std::unordered_map<int, std::pair<Solver::Result, int>> *memo);
+			std::unordered_map<long, std::pair<Solver::Result, int>> *memo);
 }
 

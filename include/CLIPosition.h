@@ -11,7 +11,7 @@ namespace CLI {
 			virtual std::string moveToStr(int move) = 0;
 			virtual CLIPosition *getAndSetVariant() = 0;
 			
-			virtual int getAIMove(std::vector<int> *moves, std::unordered_map<int, std::pair<Solver::Result, int>> *solveMap) = 0;
+			virtual int getAIMove(std::vector<int> *moves, std::unordered_map<long, std::pair<Solver::Result, int>> *solveMap) = 0;
 			virtual int getPlayerMove(std::vector<int> *moves) = 0;
 	};
 }

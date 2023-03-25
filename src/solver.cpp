@@ -6,7 +6,7 @@
 
 std::pair<Solver::Result, int> Solver::solve(Solver::Position *position, 
 			bool removeSymmetries,
-			std::unordered_map<int, std::pair<Solver::Result, int>> *memo) {
+			std::unordered_map<long, std::pair<Solver::Result, int>> *memo) {
 		int canonicalHash = position->hash(removeSymmetries);
 		if (memo->find(canonicalHash) != memo->end()) {
 			return memo->at(canonicalHash);

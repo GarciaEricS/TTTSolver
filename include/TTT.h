@@ -16,14 +16,14 @@ namespace TTT {
 			TTTPosition *doMove(int move);
 			std::vector<int> *generateMoves();
 			Solver::Primitive primitiveValue();
-			int hash(bool removeSymmetries);
+			long hash(bool removeSymmetries);
             int canonicalHash();
 
 			std::string getName(bool typeSpecified);
 			std::string getBoard();
 			std::string moveToStr(int move);
 			TTTPosition *getAndSetVariant();
-			int getAIMove(std::vector<int> *moves, std::unordered_map<int, std::pair<Solver::Result, int>> *solveMap);
+			int getAIMove(std::vector<int> *moves, std::unordered_map<long, std::pair<Solver::Result, int>> *solveMap);
 			int getPlayerMove(std::vector<int> *moves);
 
 
