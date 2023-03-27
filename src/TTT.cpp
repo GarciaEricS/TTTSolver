@@ -456,20 +456,22 @@ TTTPosition *TTTPosition::getAndSetVariant() {
 			std::cout << "Not a valid number";
 			break;
 	}
-
-	std::cout << "Misere (t or f)\n";
-	char misereChar;
-	std::cin >> misereChar;
-	switch (misereChar) {
-		case ('t'):
-			misere = true;
-			break;
-		case ('f'):
-			misere = false;
-			break;
-		default:
-			std::cout << "Please enter t or f.";
-			break;
+	misere = false;
+	if (type != Type::OnC) {
+		std::cout << "Misere (t or f)\n";
+		char misereChar;
+		std::cin >> misereChar;
+		switch (misereChar) {
+			case ('t'):
+				misere = true;
+				break;
+			case ('f'):
+				misere = false;
+				break;
+			default:
+				std::cout << "Please enter t or f.";
+				break;
+		}
 	}
 	TTTPosition *newPos = new TTTPosition(m, n, k, type, misere);
 	delete this;
