@@ -157,10 +157,10 @@ Solver::Primitive TTTPosition::primitiveValue() {
 
 	for (int s = 0; s < n; s++) {
 		XinARow = OinARow = 0;
-		int maxOffset = std::min(m - 1, n-1-s);
+		int maxOffset = std::min(s, n-1);
 		for (int off = 0; off <= maxOffset; off++) {
-			int i = m - 1 - off;
-			int j = s + off;
+			int i = s - off;
+			int j = off;
 			auto inARows = updateInARow(i, j, XinARow, OinARow);
 			XinARow = inARows.first;
 			OinARow = inARows.second;

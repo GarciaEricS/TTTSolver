@@ -1,6 +1,8 @@
 Session.vim
 src/main
 main
+debug
 *.swp
 *.swo
 src/obj/
+src/obj-debug/
