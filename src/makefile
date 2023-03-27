@@ -1,6 +1,6 @@
 IDIR =../include
 CC=g++
-CFLAGS=-I$(IDIR) -Ofast
+CFLAGS=-I$(IDIR)
 
 _DEPS = solver.h TTT.h CLIPosition.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -15,3 +15,10 @@ $(ODIR)/%.o: %.cpp $(DEPS)
 
 main: $(OBJ)
 	@$(CC) -o ../$@ $^ $(CFLAGS)
+
+debug: CFLAGS += -g
+debug: $(OBJ)
+	$(CC) -o ../$@ $^ $(CFLAGS)
+
+clean:
+	@rm $(ODIR)/*
